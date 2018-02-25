@@ -1,5 +1,9 @@
-﻿using DShop.Common.Mongo;
+﻿using System;
+using System.Threading.Tasks;
+using DShop.Common.Mongo;
+using DShop.Services.Orders.Dtos;
 using DShop.Services.Orders.Entities;
+using DShop.Services.Orders.Extensions;
 using MongoDB.Driver;
 
 namespace DShop.Services.Orders.Repositories
@@ -10,5 +14,11 @@ namespace DShop.Services.Orders.Repositories
             : base(database, "Orders")
         {
         }
+
+        public async Task<OrderDto> GetOrderByIdAsync(Guid id)
+            => await Collection
+            .Find(p => p.Id == id)
+            .AsOrderDtos()
+            .SingleOrDefaultAsync();
     }
 }

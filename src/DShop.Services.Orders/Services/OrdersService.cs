@@ -1,4 +1,5 @@
 ﻿using DShop.Common.Types;
+using DShop.Services.Orders.Dtos;
 using DShop.Services.Orders.Entities;
 using DShop.Services.Orders.Repositories;
 using System;
@@ -15,6 +16,9 @@ namespace DShop.Services.Orders.Services
         {
             _ordersRepository = ordersRepository;
         }
+
+        public async Task<OrderDto> GetOrderByIdAsync(Guid id)
+            => await _ordersRepository.GetOrderByIdAsync(id);
 
         public async Task CreateAsync(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount)
         {
