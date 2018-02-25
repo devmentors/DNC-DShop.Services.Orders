@@ -23,7 +23,7 @@ namespace DShop.Services.Orders.Entities
             Status = OrderStatus.Created;
         }
 
-        public void CompleteOrder()
+        public void Complete()
         {
             if(Status == OrderStatus.Canceled)
             {
@@ -33,7 +33,7 @@ namespace DShop.Services.Orders.Entities
             Status = OrderStatus.Completed;
         }
 
-        public void CancelOrder()
+        public void Cancel()
         {
             if (Status == OrderStatus.Completed)
             {

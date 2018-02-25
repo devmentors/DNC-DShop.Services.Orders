@@ -7,5 +7,7 @@ namespace DShop.Services.Orders.Services
     public interface IOrdersService
     {
         Task CreateAsync(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount);
+        Task CompleteAsync(Guid id);
+        Task CancelAsync(Guid id);
     }
 }
