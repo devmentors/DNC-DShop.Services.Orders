@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace DShop.Services.Orders.Handlers
 {
-    public sealed class CreateOrderHandler : ICommandHandler<CreateOrder>
+    public sealed class CancelOrderHandler : ICommandHandler<CancelOrder>
     {
         private readonly IOrdersService _ordersService;
         private readonly IBusPublisher _busPublisher;
 
-        public CreateOrderHandler(IOrdersService ordersService, IBusPublisher busPublisher)
+        public CancelOrderHandler(IOrdersService ordersService, IBusPublisher busPublisher)
         {
             _ordersService = ordersService;
             _busPublisher = busPublisher;
-        }        
+        }
 
-        public async Task HandleAsync(CreateOrder command, ICorrelationContext context)
+        public async Task HandleAsync(CancelOrder command, ICorrelationContext context)
         {
-            await _ordersService.CreateAsync(command.Id, command.CustomerId, command.Number, command.ProductIds, command.TotalAmount);
+            await _ordersService.CancelAsync(command.Id);
         }
     }
 }
