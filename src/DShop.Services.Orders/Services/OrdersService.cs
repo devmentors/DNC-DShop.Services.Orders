@@ -17,8 +17,8 @@ namespace DShop.Services.Orders.Services
             _ordersRepository = ordersRepository;
         }
 
-        public async Task<OrderDto> GetOrderByIdAsync(Guid id)
-            => await _ordersRepository.GetOrderByIdAsync(id);
+        public async Task<OrderDto> GetDtoAsync(Guid id)
+            => await _ordersRepository.GetDtoAsync(id);
 
         public async Task CreateAsync(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount)
         {
@@ -34,7 +34,7 @@ namespace DShop.Services.Orders.Services
 
         private async Task ChangeStatusAsync(Guid id, Action<Order> changeStatus)
         {
-            var order = await _ordersRepository.GetByIdAsync(id);
+            var order = await _ordersRepository.GetAsync(id);
 
             if (order == null)
             {

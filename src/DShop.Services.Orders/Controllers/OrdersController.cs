@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DShop.Services.Orders.Controllers
 {
-    [Route("api/[controller]")]
     public class OrdersController : Controller
     {
         private readonly IOrdersService _ordersService;
@@ -17,7 +16,7 @@ namespace DShop.Services.Orders.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<OrderDto> GetOrderByIdAsync(Guid id)
-            => await _ordersService.GetOrderByIdAsync(id);
+        public async Task<OrderDto> GetDtoAsync(Guid id)
+            => await _ordersService.GetDtoAsync(id);
     }
 }

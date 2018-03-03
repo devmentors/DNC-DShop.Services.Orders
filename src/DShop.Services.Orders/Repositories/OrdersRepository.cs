@@ -15,7 +15,7 @@ namespace DShop.Services.Orders.Repositories
         {
         }
 
-        public async Task<OrderDto> GetOrderByIdAsync(Guid id)
+        public async Task<OrderDto> GetDtoAsync(Guid id)
             => await Collection
             .Find(p => p.Id == id)
             .AsOrderDtos()

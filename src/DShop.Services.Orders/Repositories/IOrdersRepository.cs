@@ -8,6 +8,6 @@ namespace DShop.Services.Orders.Repositories
 {
     public interface IOrdersRepository : IMongoRepository<Order>
     {
-        Task<OrderDto> GetOrderByIdAsync(Guid id);
+        Task<OrderDto> GetDtoAsync(Guid id);
     }
 }
