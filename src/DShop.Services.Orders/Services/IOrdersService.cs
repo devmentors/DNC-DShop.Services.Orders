@@ -9,7 +9,7 @@ namespace DShop.Services.Orders.Services
     {
         Task<OrderDto> GetDtoAsync(Guid id);
 
-        Task CreateAsync(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount);
+        Task CreateAsync(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount, string currency);
         Task CompleteAsync(Guid id);
         Task CancelAsync(Guid id);
     }

@@ -11,15 +11,17 @@ namespace DShop.Services.Orders.Entities
         public long Number { get; protected set; }
         public IEnumerable<Guid> ProductIds { get; protected set; }
         public decimal TotalAmount { get; protected set; }
+        public string Currency { get; protected set; }
         public OrderStatus Status { get; protected set; }
 
-        public Order(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount)
+        public Order(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount, string currency)
             :base(id)
         {
             CustomerId = customerId;
             Number = number;
             ProductIds = productIds;
             TotalAmount = TotalAmount;
+            Currency = currency;
             Status = OrderStatus.Created;
         }
 

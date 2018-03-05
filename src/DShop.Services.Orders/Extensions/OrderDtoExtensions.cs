@@ -14,6 +14,7 @@ namespace DShop.Services.Orders.Extensions
                 Number = o.Number,
                 ProductIds = o.ProductIds,
                 TotalAmount = o.TotalAmount,
+                Currency = o.Currency,
                 Status = o.Status
             });
     }
