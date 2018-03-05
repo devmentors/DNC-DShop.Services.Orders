@@ -20,9 +20,9 @@ namespace DShop.Services.Orders.Services
         public async Task<OrderDto> GetDtoAsync(Guid id)
             => await _ordersRepository.GetDtoAsync(id);
 
-        public async Task CreateAsync(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount)
+        public async Task CreateAsync(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount, string currency)
         {
-            var order = new Order(id, customerId, number, productIds, totalAmount);
+            var order = new Order(id, customerId, number, productIds, totalAmount, currency);
             await _ordersRepository.CreateAsync(order);
         }
 
