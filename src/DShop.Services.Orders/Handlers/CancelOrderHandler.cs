@@ -21,7 +21,7 @@ namespace DShop.Services.Orders.Handlers
         public async Task HandleAsync(CancelOrder command, ICorrelationContext context)
         {
             await _ordersService.CancelAsync(command.Id);
-            await _busPublisher.PublishEventAsync(new OrderCanceled(command.Id, context.UserId));
+            await _busPublisher.PublishEventAsync(new OrderCanceled(command.Id), context);
         }
     }
 }
