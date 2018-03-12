@@ -2,9 +2,10 @@
 
 namespace DShop.Services.Orders.Controllers
 {
+    [Route("")]
     public class HomeController : Controller
     {
-        [HttpGet("")]
+        [HttpGet]
         public IActionResult Get() => Ok("DShop Orders Service");
     }
 }
