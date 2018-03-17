@@ -5,10 +5,15 @@ using Autofac.Extensions.DependencyInjection;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
+using DShop.Messages.Commands.Orders;
+using DShop.Messages.Events.Products;
+using DShop.Services.Orders.Domain;
+using DShop.Services.Orders.ServiceForwarders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using DShop.Common.RestEase;
 
 namespace DShop.Services.Orders
 {
@@ -33,6 +38,10 @@ namespace DShop.Services.Orders
             builder.Populate(services);
             builder.AddRabbitMq();
             builder.AddMongoDB();
+            builder.AddMongoDBRepository<Order>("Orders");
+            builder.AddMongoDBRepository<Product>("Products");
+            builder.RegisterServiceForwarder<IProductsApi>("products-service");
+            builder.RegisterServiceForwarder<ICartsApi>("customers-service");
 
             Container = builder.Build();
             return new AutofacServiceProvider(Container);
@@ -46,7 +55,13 @@ namespace DShop.Services.Orders
             }
 
             app.UseMvc();
-            app.UseRabbitMq();
+            app.UseRabbitMq()
+                .SubscribeCommand<CreateOrder>()
+                .SubscribeCommand<CancelOrder>()
+                .SubscribeCommand<CompleteOrder>()
+                .SubscribeEvent<ProductCreated>()
+                .SubscribeEvent<ProductUpdated>()
+                .SubscribeEvent<ProductDeleted>();
 
             applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }

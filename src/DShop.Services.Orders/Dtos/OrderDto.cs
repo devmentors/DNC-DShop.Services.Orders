@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using static DShop.Services.Orders.Entities.Order;
+using static DShop.Services.Orders.Domain.Order;
 
 namespace DShop.Services.Orders.Dtos
 {

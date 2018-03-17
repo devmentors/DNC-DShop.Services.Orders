@@ -1,13 +1,14 @@
-﻿using DShop.Common.Mongo;
-using DShop.Services.Orders.Dtos;
-using DShop.Services.Orders.Entities;
+﻿using DShop.Services.Orders.Domain;
 using System;
 using System.Threading.Tasks;
 
 namespace DShop.Services.Orders.Repositories
 {
-    public interface IOrdersRepository : IMongoRepository<Order>
+    public interface IOrdersRepository
     {
-        Task<OrderDto> GetDtoAsync(Guid id);
+        Task<Order> GetAsync(Guid id);
+        Task CreateAsync(Order order);
+        Task UpdateAsync(Order order);
+        Task DeleteAsync(Guid id);
     }
 }

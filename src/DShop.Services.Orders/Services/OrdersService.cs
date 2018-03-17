@@ -1,6 +1,6 @@
 ﻿using DShop.Common.Types;
 using DShop.Services.Orders.Dtos;
-using DShop.Services.Orders.Entities;
+using DShop.Services.Orders.Domain;
 using DShop.Services.Orders.Repositories;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,20 @@ namespace DShop.Services.Orders.Services
         }
 
         public async Task<OrderDto> GetDtoAsync(Guid id)
-            => await _ordersRepository.GetDtoAsync(id);
+        {
+            var order = await _ordersRepository.GetAsync(id);
+
+            return order == null ? null : new OrderDto
+            {
+                Id = order.Id,
+                CustomerId = order.CustomerId,
+                ProductIds = order.ProductIds,
+                Number = order.Number,
+                TotalAmount = order.TotalAmount,
+                Status = order.Status,
+                Currency = order.Currency
+            };
+        }
 
         public async Task CreateAsync(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount, string currency)
         {
