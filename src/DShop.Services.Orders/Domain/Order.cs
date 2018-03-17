@@ -3,7 +3,7 @@ using DShop.Messages.Entities;
 using System;
 using System.Collections.Generic;
 
-namespace DShop.Services.Orders.Entities
+namespace DShop.Services.Orders.Domain
 {
     public class Order : BaseEntity
     {

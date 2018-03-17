@@ -1,5 +1,5 @@
 ﻿using DShop.Services.Orders.Dtos;
-using DShop.Services.Orders.Entities;
+using DShop.Services.Orders.Domain;
 using MongoDB.Driver;
 
 namespace DShop.Services.Orders.Extensions
