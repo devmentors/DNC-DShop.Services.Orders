@@ -24,8 +24,7 @@ namespace DShop.Services.Orders.Handlers.Orders
             => await _handler.Handle(async () =>
             {
                 await _ordersService.CompleteAsync(command.Id);
-                await _busPublisher.PublishEventAsync(new OrderCompleted(command.Id), context);
-
+                await _busPublisher.PublishEventAsync(new OrderCompleted(command.Id, command.CustomerId), context);
             })
             .ExecuteAsync();
     }

@@ -24,7 +24,7 @@ namespace DShop.Services.Orders.Handlers.Orders
             => await _handler.Handle(async () =>
             {
                 await _ordersService.CancelAsync(command.Id);
-                await _busPublisher.PublishEventAsync(new OrderCanceled(command.Id), context);
+                await _busPublisher.PublishEventAsync(new OrderCanceled(command.Id, command.CustomerId), context);
             })
             .ExecuteAsync();            
         
