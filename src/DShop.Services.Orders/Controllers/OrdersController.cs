@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DShop.Services.Orders.Controllers
 {
+    [Route("[controller]")]
     public class OrdersController : Controller
     {
         private readonly IOrdersService _ordersService;

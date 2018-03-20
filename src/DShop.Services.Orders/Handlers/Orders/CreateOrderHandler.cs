@@ -46,7 +46,7 @@ namespace DShop.Services.Orders.Handlers.Orders
                     return quantity * p.Price;
                 });
 
-                var orderNumber = new Random().Next(); // TODO: How to fetch last order?
+                var orderNumber = new Random().Next(); 
 
                 await _ordersService.CreateAsync(command.Id, command.CustomerId, orderNumber, productIds, totalAmount, "US");
                 await _busPublisher.PublishEventAsync(new OrderCreated(command.Id, command.CustomerId, orderNumber), context);
