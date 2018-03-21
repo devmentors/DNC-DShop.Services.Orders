@@ -48,7 +48,7 @@ namespace DShop.Services.Orders.Handlers.Orders
 
                 var orderNumber = new Random().Next(); 
 
-                await _ordersService.CreateAsync(command.Id, command.CustomerId, orderNumber, productIds, totalAmount, "US");
+                await _ordersService.CreateAsync(command.Id, command.CustomerId, orderNumber, productIds, totalAmount, "USD");
                 await _busPublisher.PublishEventAsync(new OrderCreated(command.Id, command.CustomerId, orderNumber), context);
 
             })

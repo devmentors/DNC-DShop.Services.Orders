@@ -20,7 +20,7 @@ namespace DShop.Services.Orders.Domain
             CustomerId = customerId;
             Number = number;
             ProductIds = productIds;
-            TotalAmount = TotalAmount;
+            TotalAmount = totalAmount;
             Currency = currency;
             Status = OrderStatus.Created;
         }
