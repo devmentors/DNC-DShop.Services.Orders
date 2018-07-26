@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DShop.Common.RestEase;
+using DShop.Common.Dispatchers;
 
 namespace DShop.Services.Orders
 {
@@ -30,12 +31,11 @@ namespace DShop.Services.Orders
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().AddDefaultJsonOptions();
-
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();
-
             builder.Populate(services);
+            builder.AddDispatchers();
             builder.AddRabbitMq();
             builder.AddMongoDB();
             builder.AddMongoDBRepository<Order>("Orders");
@@ -53,7 +53,6 @@ namespace DShop.Services.Orders
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseMvc();
             app.UseRabbitMq()
                 .SubscribeCommand<CreateOrder>()
@@ -62,7 +61,6 @@ namespace DShop.Services.Orders
                 .SubscribeEvent<ProductCreated>()
                 .SubscribeEvent<ProductUpdated>()
                 .SubscribeEvent<ProductDeleted>();
-
             applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }
     }

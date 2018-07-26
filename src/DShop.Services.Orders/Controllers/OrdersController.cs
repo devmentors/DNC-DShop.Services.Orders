@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DShop.Common.Dispatchers;
 using DShop.Services.Orders.Dtos;
-using DShop.Services.Orders.Services;
+using DShop.Services.Orders.Queries;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DShop.Services.Orders.Controllers
 {
     [Route("[controller]")]
-    public class OrdersController : Controller
+    public class OrdersController : BaseController
     {
-        private readonly IOrdersService _ordersService;
-
-        public OrdersController(IOrdersService ordersService)
+        public OrdersController(IDispatcher dispatcher) : base(dispatcher)
         {
-            _ordersService = ordersService;
         }
 
         [HttpGet("{id}")]
-        public async Task<OrderDto> GetDtoAsync(Guid id)
-            => await _ordersService.GetDtoAsync(id);
+        public async Task<ActionResult<OrderDto>> Get([FromRoute] GetOrder query)
+            => Single(await DispatchAsync<GetOrder, OrderDto>(query));
     }
 }

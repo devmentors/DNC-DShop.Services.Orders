@@ -2,23 +2,24 @@ using System.Threading.Tasks;
 using DShop.Common.Handlers;
 using DShop.Common.RabbitMq;
 using DShop.Messages.Events.Products;
+using DShop.Services.Orders.Domain;
+using DShop.Services.Orders.Repositories;
 using DShop.Services.Orders.ServiceForwarders;
-using DShop.Services.Orders.Services;
 
 namespace DShop.Services.Orders.Handlers.Products
 {
     public class ProductCreatedHandler : IEventHandler<ProductCreated>
     {
         private readonly IHandler _handler;
-        private readonly IProductsService _productsService;
+        private readonly IProductsRepository _productsRepository;
         private readonly IProductsApi _productsApi;
 
         public ProductCreatedHandler(IHandler handler, 
-            IProductsService productsService,
+            IProductsRepository productsRepository,
             IProductsApi productsApi)
         {
             _handler = handler;
-            _productsService = productsService;
+            _productsRepository = productsRepository;
             _productsApi = productsApi;
         }
 
@@ -26,7 +27,7 @@ namespace DShop.Services.Orders.Handlers.Products
             => await _handler.Handle(async () => 
             {
                 var product = await _productsApi.GetAsync(@event.Id);
-                await _productsService.CreateAsync(product.Id, product.Name, product.Price);
+                await _productsRepository.CreateAsync(new Product(product.Id, product.Name, product.Price));
             })
             .ExecuteAsync();
     }
