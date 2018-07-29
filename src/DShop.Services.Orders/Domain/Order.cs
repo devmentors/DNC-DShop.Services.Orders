@@ -9,17 +9,17 @@ namespace DShop.Services.Orders.Domain
     {
         public Guid CustomerId { get; protected set; }
         public long Number { get; protected set; }
-        public IEnumerable<Guid> ProductIds { get; protected set; }
+        public IEnumerable<Guid> OrderItemIds { get; protected set; }
         public decimal TotalAmount { get; protected set; }
         public string Currency { get; protected set; }
         public OrderStatus Status { get; protected set; }
 
-        public Order(Guid id, Guid customerId, long number, IEnumerable<Guid> productIds, decimal totalAmount, string currency)
+        public Order(Guid id, Guid customerId, long number, IEnumerable<Guid> orderItemIds, decimal totalAmount, string currency)
             :base(id)
         {
             CustomerId = customerId;
             Number = number;
-            ProductIds = productIds;
+            OrderItemIds = orderItemIds;
             TotalAmount = totalAmount;
             Currency = currency;
             Status = OrderStatus.Created;

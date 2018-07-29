@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DShop.Common.RestEase;
 using DShop.Common.Dispatchers;
+using DShop.Messages.Events.Customers;
 
 namespace DShop.Services.Orders
 {
@@ -39,9 +40,11 @@ namespace DShop.Services.Orders
             builder.AddRabbitMq();
             builder.AddMongoDB();
             builder.AddMongoDBRepository<Order>("Orders");
-            builder.AddMongoDBRepository<Product>("Products");
+            builder.AddMongoDBRepository<OrderItem>("OrderItems");
+            builder.AddMongoDBRepository<Customer>("Customers");
             builder.RegisterServiceForwarder<IProductsApi>("products-service");
             builder.RegisterServiceForwarder<ICartsApi>("customers-service");
+            builder.RegisterServiceForwarder<ICustomersApi>("customers-service");
 
             Container = builder.Build();
             return new AutofacServiceProvider(Container);
@@ -60,7 +63,8 @@ namespace DShop.Services.Orders
                 .SubscribeCommand<CompleteOrder>()
                 .SubscribeEvent<ProductCreated>()
                 .SubscribeEvent<ProductUpdated>()
-                .SubscribeEvent<ProductDeleted>();
+                .SubscribeEvent<ProductDeleted>()
+                .SubscribeEvent<CustomerCreated>();
             applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }
     }

@@ -10,9 +10,7 @@ namespace DShop.Services.Orders.Repositories
         private readonly IMongoRepository<Order> _repository;
 
         public OrdersRepository(IMongoRepository<Order> repository)
-        {
-            _repository = repository;
-        }
+            => _repository = repository;
 
         public async Task<Order> GetAsync(Guid id)
             => await _repository.GetAsync(id);

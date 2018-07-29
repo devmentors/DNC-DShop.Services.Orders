@@ -9,6 +9,6 @@ namespace DShop.Services.Orders.ServiceForwarders
     {
         [AllowAnyStatusCode]
         [Get("products/{id}")]
-        Task<ProductDto> GetAsync([Path] Guid id);
+        Task<OrderItemDto> GetAsync([Path] Guid id);
     }
 }

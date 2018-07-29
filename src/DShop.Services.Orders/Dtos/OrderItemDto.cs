@@ -2,7 +2,7 @@
 
 namespace DShop.Services.Orders.Dtos
 {
-    public class ProductDto
+    public class OrderItemDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
