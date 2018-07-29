@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using DShop.Common.Dispatchers;
 using DShop.Services.Orders.Dtos;
 using DShop.Services.Orders.Queries;
@@ -15,7 +14,7 @@ namespace DShop.Services.Orders.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<OrderDto>> Get([FromRoute] GetOrder query)
-            => Single(await DispatchAsync<GetOrder, OrderDto>(query));
+        public async Task<ActionResult<OrderDetailsDto>> Get([FromRoute] GetOrder query)
+            => Single(await DispatchAsync<GetOrder, OrderDetailsDto>(query));
     }
 }

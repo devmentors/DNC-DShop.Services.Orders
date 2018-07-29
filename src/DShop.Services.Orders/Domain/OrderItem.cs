@@ -3,17 +3,17 @@ using System;
 
 namespace DShop.Services.Orders.Domain
 {
-    public class Product : IIdentifiable
+    public class OrderItem : IIdentifiable
     {
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
         public decimal Price { get; protected set; }
 
-        protected Product()
+        protected OrderItem()
         {
         }
 
-        public Product(Guid id, string name, decimal price)
+        public OrderItem(Guid id, string name, decimal price)
         {
             Id = id;
             Name = name;

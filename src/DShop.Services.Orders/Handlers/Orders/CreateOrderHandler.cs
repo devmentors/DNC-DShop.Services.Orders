@@ -15,7 +15,7 @@ namespace DShop.Services.Orders.Handlers.Orders
     {
         private readonly IHandler _handler;
         private readonly IOrdersRepository _ordersRepository;
-        private readonly IProductsRepository _productsRepository;
+        private readonly IOrderItemsRepository _productsRepository;
         private readonly ICartsApi _cartsApi;
         private readonly IBusPublisher _busPublisher;
 
@@ -23,7 +23,7 @@ namespace DShop.Services.Orders.Handlers.Orders
             IHandler handler,
             ICartsApi cartsApi,
             IOrdersRepository ordersRepository,
-            IProductsRepository productsRepository,
+            IOrderItemsRepository productsRepository,
             IBusPublisher busPublisher)
         {
             _handler = handler;
