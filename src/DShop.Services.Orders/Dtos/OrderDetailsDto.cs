@@ -2,10 +2,9 @@
 
 namespace DShop.Services.Orders.Dtos
 {
-    public class OrderDetailsDto
+    public class OrderDetailsDto : OrderDto
     {
-        public OrderDto Order { get; set; }
         public CustomerDto Customer { get; set; }
-        public IEnumerable<OrderItemDto> OrderItems { get; set; }
+        public IEnumerable<OrderItemDto> Items { get; set; }
     }
 }

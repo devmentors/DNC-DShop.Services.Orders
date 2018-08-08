@@ -1,5 +1,6 @@
 ﻿using DShop.Common.Handlers;
 using DShop.Common.RabbitMq;
+using DShop.Common.Types;
 using DShop.Messages.Commands.Orders;
 using DShop.Messages.Events.Orders;
 using DShop.Services.Orders.Domain;
@@ -15,7 +16,6 @@ namespace DShop.Services.Orders.Handlers.Orders
     {
         private readonly IHandler _handler;
         private readonly IOrdersRepository _ordersRepository;
-        private readonly IOrderItemsRepository _productsRepository;
         private readonly ICartsApi _cartsApi;
         private readonly IBusPublisher _busPublisher;
 
@@ -23,12 +23,10 @@ namespace DShop.Services.Orders.Handlers.Orders
             IHandler handler,
             ICartsApi cartsApi,
             IOrdersRepository ordersRepository,
-            IOrderItemsRepository productsRepository,
             IBusPublisher busPublisher)
         {
             _handler = handler;
             _ordersRepository = ordersRepository;
-            _productsRepository = productsRepository;
             _cartsApi = cartsApi;
             _busPublisher = busPublisher;
         }
@@ -37,18 +35,15 @@ namespace DShop.Services.Orders.Handlers.Orders
             => await _handler.Handle(async () =>
             {
                 var cart = await _cartsApi.GetAsync(command.CustomerId);
-                var productIds = cart.Items.Select(i => i.ProductId);
-                var products = await _productsRepository.GetAsync(productIds);
-                var totalAmount = products.Sum(p =>
+                if (cart == null || !cart.Items.Any())
                 {
-                    var quantity = cart.Items.FirstOrDefault(i => i.ProductId == p.Id).Quantity;
-                    return quantity * p.Price;
-                });
+                    throw new DShopException("Cannot create an order for empty cart.");
+                }
                 var orderNumber = new Random().Next(); 
-                var order = new Order(command.Id, command.CustomerId, orderNumber, productIds, totalAmount, "USD");
+                var items = cart.Items.Select(i => new OrderItem(i.ProductId, i.ProductName, i.Quantity, i.UnitPrice));
+                var order = new Order(command.Id, command.CustomerId, orderNumber, items, "USD");
                 await _ordersRepository.CreateAsync(order);
                 await _busPublisher.PublishEventAsync(new OrderCreated(command.Id, command.CustomerId, orderNumber), context);
-
             })
             .ExecuteAsync();
         

@@ -9,7 +9,7 @@ namespace DShop.Services.Orders.Dtos
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
         public long Number { get; set; }
-        public IEnumerable<Guid> OrderItemIds { get; set; }
+        public int ItemsCount { get; set; }
         public decimal TotalAmount { get; set; }
         public string Currency { get; set; }
         public OrderStatus Status { get; set; }

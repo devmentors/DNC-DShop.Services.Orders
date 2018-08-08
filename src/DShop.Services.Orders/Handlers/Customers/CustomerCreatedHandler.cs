@@ -29,7 +29,6 @@ namespace DShop.Services.Orders.Handlers.Customers
             .Handle(async () =>
             {
                 var customer = await _customersApi.GetAsync(@event.Id);
-
                 await _customersRepository.CreateAsync(new Customer(
                     customer.Id,
                     customer.Email,

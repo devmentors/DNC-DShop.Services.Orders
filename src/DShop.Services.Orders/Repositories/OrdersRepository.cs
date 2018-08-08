@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DShop.Common.Mongo;
+using DShop.Common.Types;
 using DShop.Services.Orders.Domain;
+using DShop.Services.Orders.Queries;
 
 namespace DShop.Services.Orders.Repositories
 {
@@ -14,6 +16,9 @@ namespace DShop.Services.Orders.Repositories
 
         public async Task<Order> GetAsync(Guid id)
             => await _repository.GetAsync(id);
+
+        public async Task<PagedResult<Order>> BrowseAsync(BrowseOrders query)
+            => await _repository.BrowseAsync(o => o.CustomerId == query.CustomerId, query);
 
         public async Task CreateAsync(Order order)
             => await _repository.CreateAsync(order);

@@ -61,9 +61,6 @@ namespace DShop.Services.Orders
                 .SubscribeCommand<CreateOrder>()
                 .SubscribeCommand<CancelOrder>()
                 .SubscribeCommand<CompleteOrder>()
-                .SubscribeEvent<ProductCreated>()
-                .SubscribeEvent<ProductUpdated>()
-                .SubscribeEvent<ProductDeleted>()
                 .SubscribeEvent<CustomerCreated>();
             applicationLifetime.ApplicationStopped.Register(() => Container.Dispose());
         }

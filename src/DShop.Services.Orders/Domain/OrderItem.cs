@@ -7,17 +7,20 @@ namespace DShop.Services.Orders.Domain
     {
         public Guid Id { get; protected set; }
         public string Name { get; protected set; }
-        public decimal Price { get; protected set; }
+        public int Quantity { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal TotalPrice => Quantity * UnitPrice;
 
         protected OrderItem()
         {
         }
 
-        public OrderItem(Guid id, string name, decimal price)
+        public OrderItem(Guid id, string name, int quantity, decimal unitPrice)
         {
             Id = id;
             Name = name;
-            Price = price;
+            Quantity = quantity;
+            UnitPrice = unitPrice;
         }
     }
 }
