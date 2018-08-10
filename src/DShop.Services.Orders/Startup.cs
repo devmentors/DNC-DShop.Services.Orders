@@ -2,19 +2,20 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using DShop.Common.AppMetrics;
+using DShop.Common.Dispatchers;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
+using DShop.Common.RestEase;
 using DShop.Services.Orders.Messages.Commands;
+using DShop.Services.Orders.Messages.Events;
 using DShop.Services.Orders.Domain;
 using DShop.Services.Orders.ServiceForwarders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using DShop.Common.RestEase;
-using DShop.Common.Dispatchers;
-using DShop.Services.Orders.Messages.Events;
 
 namespace DShop.Services.Orders
 {
@@ -30,7 +31,8 @@ namespace DShop.Services.Orders
 
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().AddDefaultJsonOptions();
+            services.AddCustomMvc();
+            services.AddAppMetrics();
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();
@@ -55,6 +57,8 @@ namespace DShop.Services.Orders
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseAppMetrics(applicationLifetime);
+            app.UseErrorHandler();
             app.UseMvc();
             app.UseRabbitMq()
                 .SubscribeCommand<CreateOrder>()
