@@ -1,6 +1,6 @@
 using System;
 using DShop.Common.Types;
-using DShop.Services.Orders.Dtos;
+using DShop.Services.Orders.Dto;
 
 namespace DShop.Services.Orders.Queries
 {

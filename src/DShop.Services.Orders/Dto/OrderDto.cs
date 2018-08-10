@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using static DShop.Services.Orders.Domain.Order;
 
-namespace DShop.Services.Orders.Dtos
+namespace DShop.Services.Orders.Dto
 {
     public class OrderDto
     {

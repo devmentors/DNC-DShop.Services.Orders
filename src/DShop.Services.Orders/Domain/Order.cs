@@ -1,5 +1,4 @@
 ﻿using DShop.Common.Types;
-using DShop.Messages.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

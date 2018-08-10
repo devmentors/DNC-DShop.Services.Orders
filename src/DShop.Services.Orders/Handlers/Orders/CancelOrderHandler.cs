@@ -1,8 +1,8 @@
 ﻿using DShop.Common.Handlers;
 using DShop.Common.RabbitMq;
 using DShop.Common.Types;
-using DShop.Messages.Commands.Orders;
-using DShop.Messages.Events.Orders;
+using DShop.Services.Orders.Messages.Commands;
+using DShop.Services.Orders.Messages.Events;
 using DShop.Services.Orders.Repositories;
 using System.Threading.Tasks;
 
@@ -33,7 +33,7 @@ namespace DShop.Services.Orders.Handlers.Orders
                 }
                 order.Cancel();
                 await _ordersRepository.UpdateAsync(order);
-                await _busPublisher.PublishEventAsync(new OrderCanceled(command.Id, command.CustomerId), context);
+                await _busPublisher.PublishAsync(new OrderCanceled(command.Id, command.CustomerId), context);
             })
             .ExecuteAsync();            
     }

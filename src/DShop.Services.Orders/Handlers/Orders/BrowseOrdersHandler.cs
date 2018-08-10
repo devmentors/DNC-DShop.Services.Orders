@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DShop.Common.Handlers;
 using DShop.Common.Types;
-using DShop.Services.Orders.Dtos;
+using DShop.Services.Orders.Dto;
 using DShop.Services.Orders.Queries;
 using DShop.Services.Orders.Repositories;
 

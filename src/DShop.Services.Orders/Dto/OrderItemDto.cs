@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DShop.Services.Orders.Dtos
+namespace DShop.Services.Orders.Dto
 {
     public class OrderItemDto
     {

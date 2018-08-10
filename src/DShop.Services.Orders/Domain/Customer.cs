@@ -1,5 +1,5 @@
-﻿using DShop.Messages.Entities;
-using System;
+﻿using System;
+using DShop.Common.Types;
 
 namespace DShop.Services.Orders.Domain
 {

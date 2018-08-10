@@ -5,8 +5,7 @@ using Autofac.Extensions.DependencyInjection;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
-using DShop.Messages.Commands.Orders;
-using DShop.Messages.Events.Products;
+using DShop.Services.Orders.Messages.Commands;
 using DShop.Services.Orders.Domain;
 using DShop.Services.Orders.ServiceForwarders;
 using Microsoft.AspNetCore.Builder;
@@ -15,7 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using DShop.Common.RestEase;
 using DShop.Common.Dispatchers;
-using DShop.Messages.Events.Customers;
+using DShop.Services.Orders.Messages.Events;
 
 namespace DShop.Services.Orders
 {

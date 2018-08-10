@@ -1,7 +1,7 @@
 ﻿using DShop.Common.Handlers;
 using DShop.Common.RabbitMq;
-using DShop.Messages.Events.Customers;
 using DShop.Services.Orders.Domain;
+using DShop.Services.Orders.Messages.Events;
 using DShop.Services.Orders.Repositories;
 using DShop.Services.Orders.ServiceForwarders;
 using System.Threading.Tasks;

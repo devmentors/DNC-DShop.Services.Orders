@@ -1,8 +1,8 @@
 ﻿using DShop.Common.Handlers;
 using DShop.Common.RabbitMq;
 using DShop.Common.Types;
-using DShop.Messages.Commands.Orders;
-using DShop.Messages.Events.Orders;
+using DShop.Services.Orders.Messages.Commands;
+using DShop.Services.Orders.Messages.Events;
 using DShop.Services.Orders.Domain;
 using DShop.Services.Orders.Repositories;
 using DShop.Services.Orders.ServiceForwarders;
@@ -43,7 +43,7 @@ namespace DShop.Services.Orders.Handlers.Orders
                 var items = cart.Items.Select(i => new OrderItem(i.ProductId, i.ProductName, i.Quantity, i.UnitPrice));
                 var order = new Order(command.Id, command.CustomerId, orderNumber, items, "USD");
                 await _ordersRepository.CreateAsync(order);
-                await _busPublisher.PublishEventAsync(new OrderCreated(command.Id, command.CustomerId, orderNumber), context);
+                await _busPublisher.PublishAsync(new OrderCreated(command.Id, command.CustomerId, orderNumber), context);
             })
             .ExecuteAsync();
         
