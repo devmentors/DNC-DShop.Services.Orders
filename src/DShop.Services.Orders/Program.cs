@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using DShop.Common.Metrics;
 using DShop.Common.Mvc;
 
 namespace DShop.Services.Orders
@@ -14,6 +15,7 @@ namespace DShop.Services.Orders
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseLockbox();
+                .UseLockbox()
+                .UseAppMetrics();
     }
 }
