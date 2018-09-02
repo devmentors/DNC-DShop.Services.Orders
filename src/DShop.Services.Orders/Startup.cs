@@ -9,6 +9,7 @@ using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
 using DShop.Common.RestEase;
+using DShop.Common.Swagger;
 using DShop.Services.Orders.Messages.Commands;
 using DShop.Services.Orders.Messages.Events;
 using DShop.Services.Orders.Domain;
@@ -33,6 +34,7 @@ namespace DShop.Services.Orders
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddCustomMvc();
+            services.AddSwaggerDocs();
             services.AddConsul();
             services.RegisterServiceForwarder<IProductsApi>("products-service");
             services.RegisterServiceForwarder<ICartsApi>("customers-service");
@@ -43,10 +45,10 @@ namespace DShop.Services.Orders
             builder.Populate(services);
             builder.AddDispatchers();
             builder.AddRabbitMq();
-            builder.AddMongoDB();
-            builder.AddMongoDBRepository<Order>("Orders");
-            builder.AddMongoDBRepository<OrderItem>("OrderItems");
-            builder.AddMongoDBRepository<Customer>("Customers");
+            builder.AddMongo();
+            builder.AddMongoRepository<Order>("Orders");
+            builder.AddMongoRepository<OrderItem>("OrderItems");
+            builder.AddMongoRepository<Customer>("Customers");
 
             Container = builder.Build();
             return new AutofacServiceProvider(Container);
@@ -59,6 +61,8 @@ namespace DShop.Services.Orders
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseAllForwardedHeaders();
+            app.UseSwaggerDocs();
             app.UseErrorHandler();
             app.UseServiceId();
             app.UseMvc();
