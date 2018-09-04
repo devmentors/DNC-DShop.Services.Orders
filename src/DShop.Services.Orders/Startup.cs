@@ -8,6 +8,7 @@ using DShop.Common.Dispatchers;
 using DShop.Common.Mongo;
 using DShop.Common.Mvc;
 using DShop.Common.RabbitMq;
+using DShop.Common.Redis;
 using DShop.Common.RestEase;
 using DShop.Common.Swagger;
 using DShop.Services.Orders.Messages.Commands;
@@ -39,6 +40,7 @@ namespace DShop.Services.Orders
             services.RegisterServiceForwarder<IProductsApi>("products-service");
             services.RegisterServiceForwarder<ICartsApi>("customers-service");
             services.RegisterServiceForwarder<ICustomersApi>("customers-service");
+
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())
                     .AsImplementedInterfaces();
@@ -51,6 +53,7 @@ namespace DShop.Services.Orders
             builder.AddMongoRepository<Customer>("Customers");
 
             Container = builder.Build();
+            
             return new AutofacServiceProvider(Container);
         }
 
@@ -61,6 +64,7 @@ namespace DShop.Services.Orders
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseAllForwardedHeaders();
             app.UseSwaggerDocs();
             app.UseErrorHandler();
@@ -71,6 +75,7 @@ namespace DShop.Services.Orders
                 .SubscribeCommand<CancelOrder>()
                 .SubscribeCommand<CompleteOrder>()
                 .SubscribeEvent<CustomerCreated>();
+            
             var consulServiceId = app.UseConsul();
             applicationLifetime.ApplicationStopped.Register(() => 
             { 
