@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 
 namespace DShop.Services.Orders.Messages.Events
 {
+    [MessageNamespace("customers")]
     public class CustomerCreated : IEvent
     {
         public Guid Id { get;  }

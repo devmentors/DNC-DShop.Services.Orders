@@ -3,6 +3,7 @@ using System.Reflection;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Consul;
+using DShop.Common;
 using DShop.Common.Consul;
 using DShop.Common.Dispatchers;
 using DShop.Common.Mongo;
@@ -37,6 +38,7 @@ namespace DShop.Services.Orders
             services.AddCustomMvc();
             services.AddSwaggerDocs();
             services.AddConsul();
+            services.AddInitializers(typeof(IMongoDbInitializer));
             services.RegisterServiceForwarder<IProductsApi>("products-service");
             services.RegisterServiceForwarder<ICartsApi>("customers-service");
             services.RegisterServiceForwarder<ICustomersApi>("customers-service");
@@ -58,7 +60,8 @@ namespace DShop.Services.Orders
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            IApplicationLifetime applicationLifetime, IConsulClient client)
+            IApplicationLifetime applicationLifetime, IConsulClient client,
+            IStartupInitializer startupInitializer)
         {
             if (env.IsDevelopment() || env.EnvironmentName == "local")
             {
@@ -74,7 +77,7 @@ namespace DShop.Services.Orders
                 .SubscribeCommand<CreateOrder>()
                 .SubscribeCommand<CancelOrder>()
                 .SubscribeCommand<CompleteOrder>()
-                .SubscribeEvent<CustomerCreated>();
+                .SubscribeEvent<CustomerCreated>(@namespace: "customers");
             
             var consulServiceId = app.UseConsul();
             applicationLifetime.ApplicationStopped.Register(() => 
@@ -82,6 +85,8 @@ namespace DShop.Services.Orders
                 client.Agent.ServiceDeregister(consulServiceId); 
                 Container.Dispose(); 
             });
+
+            startupInitializer.InitializeAsync();
         }
     }
 }
