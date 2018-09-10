@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
@@ -6,6 +6,10 @@ MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1BD84571-EE36-4FBB-8F74-03C4C59B20A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DShop.Services.Orders", "src\DShop.Services.Orders\DShop.Services.Orders.csproj", "{33450E22-6643-419B-A1F0-090B0B75F66B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3CE6245C-ECAF-46C2-8C34-BACD7386CEDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DShop.Services.Orders.Tests", "tests\DShop.Services.Orders.Tests\DShop.Services.Orders.Tests.csproj", "{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,8 +36,21 @@ Global
 		{33450E22-6643-419B-A1F0-090B0B75F66B}.Release|x64.Build.0 = Release|x64
 		{33450E22-6643-419B-A1F0-090B0B75F66B}.Release|x86.ActiveCfg = Release|x86
 		{33450E22-6643-419B-A1F0-090B0B75F66B}.Release|x86.Build.0 = Release|x86
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Debug|x64.Build.0 = Debug|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Debug|x86.Build.0 = Debug|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Release|x64.ActiveCfg = Release|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Release|x64.Build.0 = Release|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Release|x86.ActiveCfg = Release|Any CPU
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{33450E22-6643-419B-A1F0-090B0B75F66B} = {1BD84571-EE36-4FBB-8F74-03C4C59B20A5}
+		{60F2652C-8B18-4B9B-8FE7-60A5010B1C38} = {3CE6245C-ECAF-46C2-8C34-BACD7386CEDE}
 	EndGlobalSection
 EndGlobal
