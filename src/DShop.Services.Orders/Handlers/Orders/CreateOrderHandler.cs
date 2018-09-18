@@ -5,7 +5,7 @@ using DShop.Services.Orders.Messages.Commands;
 using DShop.Services.Orders.Messages.Events;
 using DShop.Services.Orders.Domain;
 using DShop.Services.Orders.Repositories;
-using DShop.Services.Orders.ServiceForwarders;
+using DShop.Services.Orders.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,35 +16,43 @@ namespace DShop.Services.Orders.Handlers.Orders
     {
         private readonly IHandler _handler;
         private readonly IOrdersRepository _ordersRepository;
-        private readonly ICartsApi _cartsApi;
+        private readonly ICustomersService _customersService;
         private readonly IBusPublisher _busPublisher;
 
         public CreateOrderHandler(
             IHandler handler,
-            ICartsApi cartsApi,
+            ICustomersService customersService,
             IOrdersRepository ordersRepository,
             IBusPublisher busPublisher)
         {
             _handler = handler;
             _ordersRepository = ordersRepository;
-            _cartsApi = cartsApi;
+            _customersService = customersService;
             _busPublisher = busPublisher;
         }
 
         public async Task HandleAsync(CreateOrder command, ICorrelationContext context)
             => await _handler.Handle(async () =>
             {
-                var cart = await _cartsApi.GetAsync(command.CustomerId);
-                if (cart == null || !cart.Items.Any())
+                if (await _ordersRepository.HasPendingOrder(command.CustomerId))
                 {
-                    throw new DShopException("Cannot create an order for empty cart.");
+                    throw new DShopException("customer_has_pending_order", 
+                        $"Customer with id: '{command.CustomerId}' has already a pending order.");
                 }
-                var orderNumber = new Random().Next(); 
+                var cart = await _customersService.GetCartAsync(command.CustomerId);
                 var items = cart.Items.Select(i => new OrderItem(i.ProductId, i.ProductName, i.Quantity, i.UnitPrice));
-                var order = new Order(command.Id, command.CustomerId, orderNumber, items, "USD");
-                await _ordersRepository.CreateAsync(order);
-                await _busPublisher.PublishAsync(new OrderCreated(command.Id, command.CustomerId, orderNumber), context);
+                var order = new Order(command.Id, command.CustomerId, items, "USD");
+                await _ordersRepository.AddAsync(order);
             })
+            .OnSuccess(async () =>  await _busPublisher.PublishAsync(
+                new OrderCreated(command.Id, command.CustomerId), context)
+            )
+            .OnCustomError(async ex => await _busPublisher.PublishAsync(
+                new CreateOrderRejected(command.Id, ex.Message, ex.Code), context)
+            )
+            .OnError(async ex => await _busPublisher.PublishAsync(
+                new CreateOrderRejected(command.Id, ex.Message, "create_order_failed"), context)
+            )
             .ExecuteAsync();
         
     }

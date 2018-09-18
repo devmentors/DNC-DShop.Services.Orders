@@ -15,7 +15,7 @@ using DShop.Common.Swagger;
 using DShop.Services.Orders.Messages.Commands;
 using DShop.Services.Orders.Messages.Events;
 using DShop.Services.Orders.Domain;
-using DShop.Services.Orders.ServiceForwarders;
+using DShop.Services.Orders.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -39,9 +39,8 @@ namespace DShop.Services.Orders
             services.AddSwaggerDocs();
             services.AddConsul();
             services.AddInitializers(typeof(IMongoDbInitializer));
-            services.RegisterServiceForwarder<IProductsApi>("products-service");
-            services.RegisterServiceForwarder<ICartsApi>("customers-service");
-            services.RegisterServiceForwarder<ICustomersApi>("customers-service");
+            services.RegisterServiceForwarder<IProductsService>("products-service");
+            services.RegisterServiceForwarder<ICustomersService>("customers-service");
 
             var builder = new ContainerBuilder();
             builder.RegisterAssemblyTypes(Assembly.GetEntryAssembly())

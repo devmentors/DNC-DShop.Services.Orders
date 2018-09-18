@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 using DShop.Services.Orders.Dto;
 using RestEase;
 
-namespace DShop.Services.Orders.ServiceForwarders
+namespace DShop.Services.Orders.Services
 {
-    public interface IProductsApi
+    public interface IProductsService
     {
         [AllowAnyStatusCode]
         [Get("products/{id}")]

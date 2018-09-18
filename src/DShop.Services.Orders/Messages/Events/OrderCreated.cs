@@ -8,14 +8,12 @@ namespace DShop.Services.Orders.Messages.Events
     {
         public Guid Id { get; }
         public Guid CustomerId { get; }
-        public long Number { get; }
 
         [JsonConstructor]
-        public OrderCreated(Guid id, Guid customerId, long number)
+        public OrderCreated(Guid id, Guid customerId)
         {
             Id = id;
             CustomerId = customerId;
-            Number = number;
         }
     }
 }

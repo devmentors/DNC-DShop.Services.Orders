@@ -27,14 +27,23 @@ namespace DShop.Services.Orders.Handlers.Orders
             => await _handler.Handle(async () =>
             {
                 var order = await _ordersRepository.GetAsync(command.Id);
-                if (order == null)
+                if (order == null || order.CustomerId != command.CustomerId)
                 {
-                    throw new DShopException("order_not_found", "Order not found.");
+                    throw new DShopException("order_not_found",
+                        $"Order with id: '{command.Id}' was not found for customer with id: '{command.CustomerId}'.");
                 }
                 order.Cancel();
                 await _ordersRepository.UpdateAsync(order);
-                await _busPublisher.PublishAsync(new OrderCanceled(command.Id, command.CustomerId), context);
             })
+            .OnSuccess(async () =>  await _busPublisher.PublishAsync(
+                new OrderCanceled(command.Id, command.CustomerId), context)
+            )
+            .OnCustomError(async ex => await _busPublisher.PublishAsync(
+                new CancelOrderRejected(command.Id, ex.Message, ex.Code), context)
+            )
+            .OnError(async ex => await _busPublisher.PublishAsync(
+                new CancelOrderRejected(command.Id, ex.Message, "cancel_order_failed"), context)
+            )
             .ExecuteAsync();            
     }
 }

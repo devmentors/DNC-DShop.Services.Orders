@@ -3,12 +3,12 @@ using RestEase;
 using System;
 using System.Threading.Tasks;
 
-namespace DShop.Services.Orders.ServiceForwarders
+namespace DShop.Services.Orders.Services
 {
-    public interface ICartsApi
+    public interface ICustomersService
     {
         [AllowAnyStatusCode]
         [Get("carts/{id}")]
-        Task<CartDto> GetAsync([Path] Guid id);
+        Task<CartDto> GetCartAsync([Path] Guid id);
     }
 }

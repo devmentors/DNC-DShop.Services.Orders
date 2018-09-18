@@ -8,9 +8,10 @@ namespace DShop.Services.Orders.Repositories
 {
     public interface IOrdersRepository
     {
+        Task<bool> HasPendingOrder(Guid customerId);
         Task<Order> GetAsync(Guid id);
         Task<PagedResult<Order>> BrowseAsync(BrowseOrders query);
-        Task CreateAsync(Order order);
+        Task AddAsync(Order order);
         Task UpdateAsync(Order order);
         Task DeleteAsync(Guid id);
     }

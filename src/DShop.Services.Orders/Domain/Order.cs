@@ -7,18 +7,26 @@ namespace DShop.Services.Orders.Domain
 {
     public class Order : BaseEntity
     {
-        public Guid CustomerId { get; protected set; }
-        public long Number { get; protected set; }
-        public IEnumerable<OrderItem> Items { get; protected set; } = new HashSet<OrderItem>();
-        public decimal TotalAmount { get; protected set; }
-        public string Currency { get; protected set; }
-        public OrderStatus Status { get; protected set; }
+        public Guid CustomerId { get; private set; }
+        public IEnumerable<OrderItem> Items { get; private set; } = new HashSet<OrderItem>();
+        public decimal TotalAmount { get; private set; }
+        public string Currency { get; private set; }
+        public OrderStatus Status { get; private set; }
 
-        public Order(Guid id, Guid customerId, long number, IEnumerable<OrderItem> items, string currency)
-            :base(id)
+        public Order(Guid id, Guid customerId, IEnumerable<OrderItem> items, string currency)
+            : base(id)
         {
+            if (items == null || !items.Any())
+            {
+                throw new DShopException("cannot_create_empty_order", 
+                    $"Cannot create an order for an empty cart for customer with id: '{customerId}'.");
+            }
+            if (string.IsNullOrWhiteSpace(currency))
+            {
+                throw new DShopException("invalid_currency", 
+                    $"Cannot create an order with invalid currency for customer with id: '{customerId}'.");
+            }
             CustomerId = customerId;
-            Number = number;
             Items = items;
             Currency = currency;
             Status = OrderStatus.Created;
@@ -28,15 +36,18 @@ namespace DShop.Services.Orders.Domain
         {
             if (!Items.Any())
             {
-                throw new DShopException("Cannot complete an empty order.");
+                throw new DShopException("cannot_complete_empty_order",
+                    $"Cannot complete an empty order with id: '{Id}'.");
             }
             if (Status == OrderStatus.Canceled)
             {
-                throw new DShopException("Cannot complete canceled order.");
+                throw new DShopException("cannot_complete_canceled_order",
+                    $"Cannot complete canceled order with id: '{Id}'.");
             }
             if (Status == OrderStatus.Completed)
             {
-                throw new DShopException("Cannot complete already completed order.");
+                throw new DShopException("cannot_complete_completed_order",
+                    $"Cannot complete already completed order with id: '{Id}'.");
             }
 
             Status = OrderStatus.Completed;
@@ -46,11 +57,13 @@ namespace DShop.Services.Orders.Domain
         {
             if (Status == OrderStatus.Canceled)
             {
-                throw new DShopException("Cannot cancel already canceled order.");
+                throw new DShopException("cannot_cancel_canceled_order",
+                    $"Cannot cancel already canceled order with id: '{Id}'");
             }
             if (Status == OrderStatus.Completed)
             {
-                throw new DShopException("Cannot cancel completed order.");
+                throw new DShopException("cannot_cancel_completed_order",
+                    $"Cannot cancel completed order with id: '{Id}'");
             }
 
             Status = OrderStatus.Canceled;

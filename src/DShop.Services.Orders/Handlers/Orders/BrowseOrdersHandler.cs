@@ -25,7 +25,6 @@ namespace DShop.Services.Orders.Handlers.Orders
             {
                 Id = o.Id,
                 CustomerId = o.CustomerId,
-                Number = o.Number,
                 ItemsCount = o.Items.Count(),
                 TotalAmount = o.TotalAmount,
                 Currency = o.Currency,

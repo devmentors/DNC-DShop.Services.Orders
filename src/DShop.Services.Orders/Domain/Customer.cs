@@ -5,12 +5,12 @@ namespace DShop.Services.Orders.Domain
 {
     public class Customer : IIdentifiable
     {
-        public Guid Id { get; protected set; }
-        public string Email { get; protected set; }
-        public string FirstName { get; protected set; }
-        public string LastName { get; protected set; }
-        public string Address { get; protected set; }
-        public string Country { get; protected set; }
+        public Guid Id { get; private set; }
+        public string Email { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Address { get; private set; }
+        public string Country { get; private set; }
 
         protected Customer()
         {

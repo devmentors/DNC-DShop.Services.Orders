@@ -8,7 +8,6 @@ namespace DShop.Services.Orders.Dto
     {
         public Guid Id { get; set; }
         public Guid CustomerId { get; set; }
-        public long Number { get; set; }
         public int ItemsCount { get; set; }
         public decimal TotalAmount { get; set; }
         public string Currency { get; set; }

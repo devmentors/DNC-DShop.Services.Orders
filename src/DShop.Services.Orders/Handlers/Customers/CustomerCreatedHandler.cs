@@ -3,7 +3,7 @@ using DShop.Common.RabbitMq;
 using DShop.Services.Orders.Domain;
 using DShop.Services.Orders.Messages.Events;
 using DShop.Services.Orders.Repositories;
-using DShop.Services.Orders.ServiceForwarders;
+using DShop.Services.Orders.Services;
 using System.Threading.Tasks;
 
 namespace DShop.Services.Orders.Handlers.Customers
@@ -12,31 +12,19 @@ namespace DShop.Services.Orders.Handlers.Customers
     {
         private readonly IHandler _handler;
         private readonly ICustomersRepository _customersRepository;
-        private readonly ICustomersApi _customersApi;
 
-        public CustomerCreatedHandler(
-            IHandler handler,
-            ICustomersRepository customersRepository,
-            ICustomersApi customersApi)
+        public CustomerCreatedHandler(IHandler handler,
+            ICustomersRepository customersRepository)
         {
             _handler = handler;
             _customersRepository = customersRepository;
-            _customersApi = customersApi;
         }
 
         public async Task HandleAsync(CustomerCreated @event, ICorrelationContext context)
             => await _handler
-            .Handle(async () =>
-            {
-                var customer = await _customersApi.GetAsync(@event.Id);
-                await _customersRepository.CreateAsync(new Customer(
-                    customer.Id,
-                    customer.Email,
-                    customer.FirstName,
-                    customer.LastName,
-                    customer.Address,
-                    customer.Country));
-            })
-            .ExecuteAsync();
+                .Handle(async () => await _customersRepository.AddAsync(new Customer(@event.Id, 
+                    @event.Email, @event.FirstName, @event.LastName, @event.Address, @event.Country))
+                )
+                .ExecuteAsync();
     }
 }
