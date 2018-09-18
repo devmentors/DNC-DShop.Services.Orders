@@ -1,31 +1,12 @@
-FROM microsoft/dotnet:2.1-sdk AS builder
+FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /app
-
-ARG sln=DShop.Services.Orders.sln
-ARG service=src/DShop.Services.Orders
-ARG tests=tests/DShop.Services.Orders.Tests
-ARG configuration=Release
-ARG feed='--source "https://api.nuget.org/v3/index.json" --source "https://www.myget.org/F/dnc-dshop/api/v3/index.json" --source "https://www.myget.org/F/chronicle/api/v3/index.json"'
-
-COPY ${sln} ./
-COPY ./${service} ./${service}/
-COPY ./${tests} ./${tests}/
-
-RUN dotnet restore /property:Configuration=${configuration} ${feed}
-
-COPY . ./
-RUN dotnet publish ${service} -c ${configuration} -o out ${feed}
+COPY . .
+RUN dotnet publish src/DShop.Services.Orders -c Release -o out --source https://api.nuget.org/v3/index.json --source https://www.myget.org/F/dnc-dshop/api/v3/index.json
 
 FROM microsoft/dotnet:2.1-aspnetcore-runtime
 WORKDIR /app
-
-ARG service=src/DShop.Services.Orders
-
-COPY --from=builder /app/${service}/out/ .
-
+COPY --from=build /app/src/DShop.Services.Orders/out .
 ENV ASPNETCORE_URLS http://*:5000
 ENV ASPNETCORE_ENVIRONMENT docker
-
 EXPOSE 5000
-
 ENTRYPOINT dotnet DShop.Services.Orders.dll
