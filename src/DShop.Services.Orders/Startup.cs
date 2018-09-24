@@ -76,6 +76,7 @@ namespace DShop.Services.Orders
                 .SubscribeCommand<CreateOrder>()
                 .SubscribeCommand<CancelOrder>()
                 .SubscribeCommand<CompleteOrder>()
+                .SubscribeCommand<CreateOrderDiscount>()
                 .SubscribeEvent<CustomerCreated>(@namespace: "customers");
             
             var consulServiceId = app.UseConsul();
