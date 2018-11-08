@@ -10,40 +10,28 @@ namespace DShop.Services.Orders.Handlers.Orders
 {
     public sealed class CompleteOrderHandler : ICommandHandler<CompleteOrder>
     {
-        private readonly IHandler _handler;
-        private readonly IOrdersRepository _ordersRepository;
         private readonly IBusPublisher _busPublisher;
+        private readonly IOrdersRepository _ordersRepository;
 
-        public CompleteOrderHandler(IHandler handler, 
-            IOrdersRepository ordersRepository, 
-            IBusPublisher busPublisher)
+        public CompleteOrderHandler(IBusPublisher busPublisher,
+            IOrdersRepository ordersRepository)
         {
-            _handler = handler;
             _ordersRepository = ordersRepository;
             _busPublisher = busPublisher;
         }
 
         public async Task HandleAsync(CompleteOrder command, ICorrelationContext context)
-            => await _handler.Handle(async () =>
+        {
+            var order = await _ordersRepository.GetAsync(command.Id);
+            if (order == null || order.CustomerId != command.CustomerId)
             {
-                var order = await _ordersRepository.GetAsync(command.Id);
-                if (order == null || order.CustomerId != command.CustomerId)
-                {
-                    throw new DShopException("order_not_found",
-                        $"Order with id: '{command.Id}' was not found for customer with id: '{command.CustomerId}'.");
-                }
-                order.Complete();
-                await _ordersRepository.UpdateAsync(order);
-            })
-            .OnSuccess(async () =>  await _busPublisher.PublishAsync(
-                new OrderCompleted(command.Id, command.CustomerId), context)
-            )
-            .OnCustomError(async ex => await _busPublisher.PublishAsync(
-                new CompleteOrderRejected(command.Id, ex.Message, ex.Code), context)
-            )
-            .OnError(async ex => await _busPublisher.PublishAsync(
-                new CompleteOrderRejected(command.Id, ex.Message, "complete_order_failed"), context)
-            )
-            .ExecuteAsync();
+                throw new DShopException("order_not_found",
+                    $"Order with id: '{command.Id}' was not found for customer with id: '{command.CustomerId}'.");
+            }
+
+            order.Complete();
+            await _ordersRepository.UpdateAsync(order);
+            await _busPublisher.PublishAsync(new OrderCompleted(command.Id, command.CustomerId), context);
+        }
     }
 }

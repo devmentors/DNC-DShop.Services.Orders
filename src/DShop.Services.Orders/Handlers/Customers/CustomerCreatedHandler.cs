@@ -10,21 +10,15 @@ namespace DShop.Services.Orders.Handlers.Customers
 {
     public class CustomerCreatedHandler : IEventHandler<CustomerCreated>
     {
-        private readonly IHandler _handler;
         private readonly ICustomersRepository _customersRepository;
 
-        public CustomerCreatedHandler(IHandler handler,
-            ICustomersRepository customersRepository)
+        public CustomerCreatedHandler(ICustomersRepository customersRepository)
         {
-            _handler = handler;
             _customersRepository = customersRepository;
         }
 
-        public async Task HandleAsync(CustomerCreated @event, ICorrelationContext context)
-            => await _handler
-                .Handle(async () => await _customersRepository.AddAsync(new Customer(@event.Id, 
-                    @event.Email, @event.FirstName, @event.LastName, @event.Address, @event.Country))
-                )
-                .ExecuteAsync();
+        public async Task HandleAsync(CustomerCreated @event, ICorrelationContext context) =>
+            await _customersRepository.AddAsync(new Customer(@event.Id, @event.Email,
+                @event.FirstName, @event.LastName, @event.Address, @event.Country));
     }
 }
