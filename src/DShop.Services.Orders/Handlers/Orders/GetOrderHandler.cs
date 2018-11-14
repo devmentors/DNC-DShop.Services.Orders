@@ -52,7 +52,8 @@ namespace DShop.Services.Orders.Handlers.Orders
                     Id = i.Id,
                     Name = i.Name,
                     UnitPrice = i.UnitPrice,
-                    Quantity = i.Quantity
+                    Quantity = i.Quantity,
+                    TotalPrice = i.TotalPrice
                 })
             };
         }
