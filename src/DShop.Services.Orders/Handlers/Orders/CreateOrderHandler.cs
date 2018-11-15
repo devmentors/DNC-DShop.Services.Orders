@@ -35,10 +35,12 @@ namespace DShop.Services.Orders.Handlers.Orders
             }
 
             var cart = await _customersService.GetCartAsync(command.CustomerId);
-            var items = cart.Items.Select(i => new OrderItem(i.ProductId, i.ProductName, i.Quantity, i.UnitPrice));
+            var items = cart.Items.Select(i => new OrderItem(i.ProductId,
+                i.ProductName, i.Quantity, i.UnitPrice)).ToList();
             var order = new Order(command.Id, command.CustomerId, items, "USD");
             await _ordersRepository.AddAsync(order);
-            await _busPublisher.PublishAsync(new OrderCreated(command.Id, command.CustomerId), context);
+            await _busPublisher.PublishAsync(new OrderCreated(command.Id, command.CustomerId,
+                items.ToDictionary(i => i.Id, i => i.Quantity)), context);
         }
     }
 }

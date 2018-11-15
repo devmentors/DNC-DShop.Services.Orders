@@ -73,11 +73,13 @@ namespace DShop.Services.Orders
             app.UseMvc();
             app.UseRabbitMq()
                 .SubscribeCommand<CreateOrder>(onError: (c, e) =>
-                    new CreateOrderRejected(c.Id, e.Message, e.Code))
+                    new CreateOrderRejected(c.Id, c.CustomerId, e.Message, e.Code))
+                .SubscribeCommand<ApproveOrder>(onError: (c, e) =>
+                    new ApproveOrderRejected(c.Id, e.Message, e.Code))
                 .SubscribeCommand<CancelOrder>(onError: (c, e) =>
-                    new CancelOrderRejected(c.Id, e.Message, e.Code))
+                    new CancelOrderRejected(c.Id, c.CustomerId, e.Message, e.Code))
                 .SubscribeCommand<CompleteOrder>(onError: (c, e) =>
-                    new CompleteOrderRejected(c.Id, e.Message, e.Code))
+                    new CompleteOrderRejected(c.Id, c.CustomerId, e.Message, e.Code))
                 .SubscribeCommand<CreateOrderDiscount>()
                 .SubscribeEvent<CustomerCreated>(@namespace: "customers");
 

@@ -8,7 +8,7 @@ namespace DShop.Services.Orders.Domain
     public class Order : BaseEntity
     {
         public Guid CustomerId { get; private set; }
-        public IEnumerable<OrderItem> Items { get; private set; } = new HashSet<OrderItem>();
+        public IEnumerable<OrderItem> Items { get; private set; }
         public decimal TotalAmount { get; private set; }
         public string Currency { get; private set; }
         public OrderStatus Status { get; private set; }
@@ -18,62 +18,86 @@ namespace DShop.Services.Orders.Domain
         {
             if (items == null || !items.Any())
             {
-                throw new DShopException("cannot_create_empty_order", 
+                throw new DShopException("cannot_create_empty_order",
                     $"Cannot create an order for an empty cart for customer with id: '{customerId}'.");
             }
+
             if (string.IsNullOrWhiteSpace(currency))
             {
-                throw new DShopException("invalid_currency", 
+                throw new DShopException("invalid_currency",
                     $"Cannot create an order with invalid currency for customer with id: '{customerId}'.");
             }
+
             CustomerId = customerId;
             Items = items;
             Currency = currency;
             Status = OrderStatus.Created;
             TotalAmount = Items.Sum(i => i.TotalPrice);
         }
+
+        public void Approve()
+        {
+            switch (Status)
+            {
+                case OrderStatus.Approved:
+                    throw new DShopException("cannot_approve_approved_order",
+                        $"Cannot approve an approved order with id: '{Id}'.");
+                case OrderStatus.Canceled:
+                    throw new DShopException("cannot_complete_canceled_order",
+                        $"Cannot complete a canceled order with id: '{Id}'.");
+                case OrderStatus.Completed:
+                    throw new DShopException("cannot_complete_completed_order",
+                        $"Cannot complete an already completed order with id: '{Id}'.");
+                default:
+                    Status = OrderStatus.Approved;
+                    break;
+            }
+        }
+
         public void Complete()
         {
-            if (!Items.Any())
+            if (Status != OrderStatus.Approved)
             {
-                throw new DShopException("cannot_complete_empty_order",
-                    $"Cannot complete an empty order with id: '{Id}'.");
-            }
-            if (Status == OrderStatus.Canceled)
-            {
-                throw new DShopException("cannot_complete_canceled_order",
-                    $"Cannot complete canceled order with id: '{Id}'.");
-            }
-            if (Status == OrderStatus.Completed)
-            {
-                throw new DShopException("cannot_complete_completed_order",
-                    $"Cannot complete already completed order with id: '{Id}'.");
+                throw new DShopException("cannot_complete_not_approved_order",
+                    $"Cannot complete not approved order with id: '{Id}'.");
             }
 
-            Status = OrderStatus.Completed;
+            switch (Status)
+            {
+                case OrderStatus.Canceled:
+                    throw new DShopException("cannot_complete_canceled_order",
+                        $"Cannot complete a canceled order with id: '{Id}'.");
+                case OrderStatus.Completed:
+                    throw new DShopException("cannot_complete_completed_order",
+                        $"Cannot complete an already completed order with id: '{Id}'.");
+                default:
+                    Status = OrderStatus.Completed;
+                    break;
+            }
         }
 
         public void Cancel()
         {
-            if (Status == OrderStatus.Canceled)
+            switch (Status)
             {
-                throw new DShopException("cannot_cancel_canceled_order",
-                    $"Cannot cancel already canceled order with id: '{Id}'");
+                case OrderStatus.Canceled:
+                    throw new DShopException("cannot_cancel_canceled_order",
+                        $"Cannot cancel an already canceled order with id: '{Id}'");
+                case OrderStatus.Completed:
+                    throw new DShopException("cannot_cancel_completed_order",
+                        $"Cannot cancel a completed order with id: '{Id}'");
+                default:
+                    Status = OrderStatus.Canceled;
+                    break;
             }
-            if (Status == OrderStatus.Completed)
-            {
-                throw new DShopException("cannot_cancel_completed_order",
-                    $"Cannot cancel completed order with id: '{Id}'");
-            }
-
-            Status = OrderStatus.Canceled;
         }
 
         public enum OrderStatus : byte
         {
             Created = 0,
-            Completed = 1,
-            Canceled = 2,
+            Approved = 1,
+            Completed = 2,
+            Canceled = 3,
         }
     }
 }

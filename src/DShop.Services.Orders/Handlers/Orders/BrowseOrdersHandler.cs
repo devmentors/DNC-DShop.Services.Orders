@@ -28,7 +28,7 @@ namespace DShop.Services.Orders.Handlers.Orders
                 ItemsCount = o.Items.Count(),
                 TotalAmount = o.TotalAmount,
                 Currency = o.Currency,
-                Status = o.Status
+                Status = o.Status.ToString().ToLowerInvariant()
             });
 
             return PagedResult<OrderDto>.From(pagedResult, orders);

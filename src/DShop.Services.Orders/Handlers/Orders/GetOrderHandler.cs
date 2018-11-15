@@ -36,7 +36,7 @@ namespace DShop.Services.Orders.Handlers.Orders
                 CustomerId = order.CustomerId,
                 ItemsCount = order.Items.Count(),
                 TotalAmount = order.TotalAmount,
-                Status = order.Status,
+                Status = order.Status.ToString().ToLowerInvariant(),
                 Currency = order.Currency,
                 Customer = new CustomerDto
                 {

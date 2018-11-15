@@ -16,7 +16,9 @@ namespace DShop.Services.Orders.Repositories
             => _repository = repository;
 
         public async Task<bool> HasPendingOrder(Guid customerId)
-            => await _repository.ExistsAsync(o => o.CustomerId == customerId && o.Status == OrderStatus.Created);
+            => await _repository.ExistsAsync(o => o.CustomerId == customerId &&
+                                                  (o.Status == OrderStatus.Created ||
+                                                   o.Status == OrderStatus.Approved));
 
         public async Task<Order> GetAsync(Guid id)
             => await _repository.GetAsync(id);
