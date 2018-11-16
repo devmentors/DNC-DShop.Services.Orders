@@ -43,11 +43,14 @@ namespace DShop.Services.Orders.Domain
                     throw new DShopException("cannot_approve_approved_order",
                         $"Cannot approve an approved order with id: '{Id}'.");
                 case OrderStatus.Canceled:
-                    throw new DShopException("cannot_complete_canceled_order",
-                        $"Cannot complete a canceled order with id: '{Id}'.");
+                    throw new DShopException("cannot_approve_canceled_order",
+                        $"Cannot approve a canceled order with id: '{Id}'.");
+                case OrderStatus.Revoked:
+                    throw new DShopException("cannot_approve_revoked_order",
+                        $"Cannot approve a revoked order with id: '{Id}'.");
                 case OrderStatus.Completed:
-                    throw new DShopException("cannot_complete_completed_order",
-                        $"Cannot complete an already completed order with id: '{Id}'.");
+                    throw new DShopException("cannot_approve_completed_order",
+                        $"Cannot approve a completed order with id: '{Id}'.");
                 default:
                     Status = OrderStatus.Approved;
                     break;
@@ -67,6 +70,9 @@ namespace DShop.Services.Orders.Domain
                 case OrderStatus.Canceled:
                     throw new DShopException("cannot_complete_canceled_order",
                         $"Cannot complete a canceled order with id: '{Id}'.");
+                case OrderStatus.Revoked:
+                    throw new DShopException("cannot_complete_revoked_order",
+                        $"Cannot complete a revoked order with id: '{Id}'.");
                 case OrderStatus.Completed:
                     throw new DShopException("cannot_complete_completed_order",
                         $"Cannot complete an already completed order with id: '{Id}'.");
@@ -83,11 +89,27 @@ namespace DShop.Services.Orders.Domain
                 case OrderStatus.Canceled:
                     throw new DShopException("cannot_cancel_canceled_order",
                         $"Cannot cancel an already canceled order with id: '{Id}'");
+                case OrderStatus.Revoked:
+                    throw new DShopException("cannot_cancel_revoked_order",
+                        $"Cannot cancel a revoked order with id: '{Id}'.");
                 case OrderStatus.Completed:
                     throw new DShopException("cannot_cancel_completed_order",
                         $"Cannot cancel a completed order with id: '{Id}'");
                 default:
                     Status = OrderStatus.Canceled;
+                    break;
+            }
+        }
+
+        public void Revoke()
+        {
+            switch (Status)
+            {
+                case OrderStatus.Revoked:
+                    throw new DShopException("cannot_revoke_revoked_order",
+                        $"Cannot revoke an already revoked order with id: '{Id}'");
+                default:
+                    Status = OrderStatus.Revoked;
                     break;
             }
         }
@@ -98,6 +120,7 @@ namespace DShop.Services.Orders.Domain
             Approved = 1,
             Completed = 2,
             Canceled = 3,
+            Revoked = 4
         }
     }
 }

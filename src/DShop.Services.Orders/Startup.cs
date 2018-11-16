@@ -78,6 +78,8 @@ namespace DShop.Services.Orders
                     new ApproveOrderRejected(c.Id, e.Message, e.Code))
                 .SubscribeCommand<CancelOrder>(onError: (c, e) =>
                     new CancelOrderRejected(c.Id, c.CustomerId, e.Message, e.Code))
+                .SubscribeCommand<RevokeOrder>(onError: (c, e) =>
+                    new RevokeOrderRejected(c.Id, c.CustomerId, e.Message, e.Code))
                 .SubscribeCommand<CompleteOrder>(onError: (c, e) =>
                     new CompleteOrderRejected(c.Id, c.CustomerId, e.Message, e.Code))
                 .SubscribeCommand<CreateOrderDiscount>()
