@@ -6,6 +6,7 @@ namespace DShop.Services.Orders.Queries
 {
     public class GetOrder : IQuery<OrderDetailsDto>
     {
-        public Guid Id { get; set; }
+        public Guid OrderId { get; set; }
+        public Guid? CustomerId { get; set; }
     }
 }
