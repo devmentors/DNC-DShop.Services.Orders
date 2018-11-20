@@ -22,8 +22,8 @@ namespace DShop.Services.Orders.Handlers.Orders
 
         public async Task<OrderDetailsDto> HandleAsync(GetOrder query)
         {
-            var order = await _ordersRepository.GetAsync(query.Id);
-            if (order == null)
+            var order = await _ordersRepository.GetAsync(query.OrderId);
+            if (order == null || query.CustomerId.HasValue && query.CustomerId != order.CustomerId)
             {
                 return null;
             }
@@ -38,6 +38,7 @@ namespace DShop.Services.Orders.Handlers.Orders
                 TotalAmount = order.TotalAmount,
                 Status = order.Status.ToString().ToLowerInvariant(),
                 Currency = order.Currency,
+                Discount = order.Discount,
                 Customer = new CustomerDto
                 {
                     Id = customer.Id,

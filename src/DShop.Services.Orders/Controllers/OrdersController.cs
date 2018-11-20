@@ -7,19 +7,23 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DShop.Services.Orders.Controllers
 {
-    [Route("[controller]")]
+    [Route("")]
     public class OrdersController : BaseController
     {
         public OrdersController(IDispatcher dispatcher) : base(dispatcher)
         {
         }
 
-        [HttpGet]
+        [HttpGet("orders")]
         public async Task<ActionResult<PagedResult<OrderDto>>> Get([FromQuery] BrowseOrders query)
             => Collection(await QueryAsync(query));
 
-        [HttpGet("{id}")]
+        [HttpGet("orders/{id}")]
         public async Task<ActionResult<OrderDetailsDto>> Get([FromRoute] GetOrder query)
+            => Single(await QueryAsync(query));
+        
+        [HttpGet("customers/{customerId}/orders/{orderId}")]
+        public async Task<ActionResult<OrderDetailsDto>> GetForCustomer([FromRoute] GetOrder query)
             => Single(await QueryAsync(query));
     }
 }
