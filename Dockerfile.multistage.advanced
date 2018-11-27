@@ -5,7 +5,7 @@ ARG sln=DShop.Services.Orders.sln
 ARG service=src/DShop.Services.Orders
 ARG tests=tests/DShop.Services.Orders.Tests
 ARG configuration=Release
-ARG feed='--source "https://api.nuget.org/v3/index.json" --source "https://www.myget.org/F/dnc-dshop/api/v3/index.json" --source "https://www.myget.org/F/chronicle/api/v3/index.json"'
+ARG feed='--source "https://api.nuget.org/v3/index.json" --source "https://www.myget.org/F/chronicle/api/v3/index.json"'
 
 COPY ${sln} ./
 COPY ./${service} ./${service}/
