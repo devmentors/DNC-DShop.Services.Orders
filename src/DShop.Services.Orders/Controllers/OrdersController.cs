@@ -18,7 +18,7 @@ namespace DShop.Services.Orders.Controllers
         public async Task<ActionResult<PagedResult<OrderDto>>> Get([FromQuery] BrowseOrders query)
             => Collection(await QueryAsync(query));
 
-        [HttpGet("orders/{id}")]
+        [HttpGet("orders/{orderId}")]
         public async Task<ActionResult<OrderDetailsDto>> Get([FromRoute] GetOrder query)
             => Single(await QueryAsync(query));
         
