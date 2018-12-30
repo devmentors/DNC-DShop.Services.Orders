@@ -83,7 +83,8 @@ namespace DShop.Services.Orders
                 .SubscribeCommand<CompleteOrder>(onError: (c, e) =>
                     new CompleteOrderRejected(c.Id, c.CustomerId, e.Message, e.Code))
                 .SubscribeCommand<CreateOrderDiscount>()
-                .SubscribeEvent<CustomerCreated>(@namespace: "customers");
+                .SubscribeEvent<CustomerCreated>(@namespace: "customers")
+                .SubscribeEvent<DiscountCreated>();
 
             var consulServiceId = app.UseConsul();
             applicationLifetime.ApplicationStopped.Register(() =>
