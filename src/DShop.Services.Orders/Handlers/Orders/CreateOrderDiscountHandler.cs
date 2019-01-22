@@ -10,7 +10,7 @@ namespace DShop.Services.Orders.Handlers.Orders
     {
         public Task HandleAsync(CreateOrderDiscount command, ICorrelationContext context)
         {
-            Console.WriteLine("I was triggered by SAGA!!!");
+            Console.WriteLine($"Creating an order discount, value: '{command.Percentage}%'");
             return Task.CompletedTask;
         }
     }
