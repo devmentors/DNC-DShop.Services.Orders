@@ -34,27 +34,27 @@ namespace DShop.Services.Orders.Handlers.Orders
             {
                 Id = order.Id,
                 CustomerId = order.CustomerId,
-                ItemsCount = order.Items.Count(),
+                ItemsCount = 4,//order.Items.Count(),
                 TotalAmount = order.TotalAmount,
                 Status = order.Status.ToString().ToLowerInvariant(),
                 Currency = order.Currency,
-                Customer = new CustomerDto
-                {
-                    Id = customer.Id,
-                    Email = customer.Email,
-                    FirstName = customer.FirstName,
-                    LastName = customer.LastName,
-                    Address = customer.Address,
-                    Country = customer.Country
-                },
-                Items = order.Items.Select(i => new OrderItemDto
-                {
-                    Id = i.Id,
-                    Name = i.Name,
-                    UnitPrice = i.UnitPrice,
-                    Quantity = i.Quantity,
-                    TotalPrice = i.TotalPrice
-                })
+//                Customer = new CustomerDto
+//                {
+//                    Id = customer.Id,
+//                    Email = customer.Email,
+//                    FirstName = customer.FirstName,
+//                    LastName = customer.LastName,
+//                    Address = customer.Address,
+//                    Country = customer.Country
+//                },
+//                Items = order.Items.Select(i => new OrderItemDto
+//                {
+//                    Id = i.Id,
+//                    Name = i.Name,
+//                    UnitPrice = i.UnitPrice,
+//                    Quantity = i.Quantity,
+//                    TotalPrice = i.TotalPrice
+//                })
             };
         }
     }
